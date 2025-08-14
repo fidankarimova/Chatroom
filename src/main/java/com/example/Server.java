@@ -1,22 +1,31 @@
 package com.example;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
 public class Server {
     private ServerSocket serverSocket;
+    private String clientUsername;
+    private BufferedWriter bufferedWriter;
+    private BufferedReader bufferedReader;
+    private Socket socket;
 
-    public Server(ServerSocket serverSocket) {
+    public Server(ServerSocket serverSocket) throws IOException {
+        this.socket = socket;
         this.serverSocket = serverSocket;
+        this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.clientUsername = bufferedReader.readLine();
     }
 
     public void startServer() {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
-                System.out.println("New client");
                 ClientHandler clientHandler = new ClientHandler(socket);
+                System.out.println(clientUsername + "connected");
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }
@@ -36,9 +45,5 @@ public class Server {
             e.printStackTrace();
         }
     }
-    public static void main (String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(1234);
-        Server server = new Server(serverSocket);
-        server.startServer();
-    }
+
 }

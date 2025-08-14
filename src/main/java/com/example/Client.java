@@ -144,29 +144,4 @@ public class Client {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter server IP: ");
-        String ip = scanner.nextLine();
-        if (ip.trim().isEmpty()) {
-            ip = "localhost";
-        }
-
-        System.out.print("Enter a username: ");
-        String username = scanner.nextLine();
-
-        try {
-            Socket socket = new Socket(ip, 1234);
-            Client client = new Client(socket, username);
-
-            System.out.println("Connected to chat server!");
-            client.listenForMessage();
-            client.sendMessage();
-        } catch (IOException e) {
-            System.err.println("Could not connect to server. Make sure the server is running on " + ip + ":1234");
-            e.printStackTrace();
-        }
-    }
 }
